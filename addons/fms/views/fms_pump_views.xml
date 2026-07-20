@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.island
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_island_list" model="ir.ui.view">
+        <field name="name">fms.island.list</field>
+        <field name="model">fms.island</field>
+        <field name="arch" type="xml">
+            <list string="Islands">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="pump_count" string="Pumps"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fms_island_form" model="ir.ui.view">
+        <field name="name">fms.island.form</field>
+        <field name="model">fms.island</field>
+        <field name="arch" type="xml">
+            <form string="Island">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Island Name…"/></h1>
+                    </div>
+                    <group>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Pumps" name="pumps">
+                            <field name="pump_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fms_island" model="ir.actions.act_window">
+        <field name="name">Islands</field>
+        <field name="res_model">fms.island</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.pump.nozzle  (embedded list — defined before pump form that uses it)
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_pump_nozzle_list_embedded" model="ir.ui.view">
+        <field name="name">fms.pump.nozzle.list.embedded</field>
+        <field name="model">fms.pump.nozzle</field>
+        <field name="arch" type="xml">
+            <list string="Nozzles" editable="bottom">
+                <field name="nozzle_number" string="#"/>
+                <field name="tank_location_id" string="Tank"
+                       domain="[('fms_is_fuel_tank', '=', True)]"/>
+                <field name="fuel_product_id" string="Fuel Grade" readonly="1"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.pump
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_pump_list" model="ir.ui.view">
+        <field name="name">fms.pump.list</field>
+        <field name="model">fms.pump</field>
+        <field name="arch" type="xml">
+            <list string="Pumps">
+                <field name="name"/>
+                <field name="island_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fms_pump_form" model="ir.ui.view">
+        <field name="name">fms.pump.form</field>
+        <field name="model">fms.pump</field>
+        <field name="arch" type="xml">
+            <form string="Pump">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Pump Name…"/></h1>
+                    </div>
+                    <group>
+                        <field name="island_id"/>
+                        <field name="company_id" readonly="1"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Nozzles" name="nozzles">
+                            <field name="nozzle_ids"
+                                   widget="one2many">
+                                <list string="Nozzles" editable="bottom">
+                                    <field name="nozzle_number" string="#"/>
+                                    <field name="tank_location_id" string="Tank"
+                                           domain="[('fms_is_fuel_tank', '=', True)]"/>
+                                    <field name="fuel_product_id" string="Fuel Grade" readonly="1"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fms_pump" model="ir.actions.act_window">
+        <field name="name">Pumps</field>
+        <field name="res_model">fms.pump</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No pumps configured yet.</p>
+            <p>Add pump units organised by forecourt island.</p>
+        </field>
+    </record>
+
+</odoo>

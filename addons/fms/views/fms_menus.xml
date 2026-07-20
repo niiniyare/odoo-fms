@@ -39,4 +39,20 @@
         sequence="20"
     />
 
+    <menuitem
+        id="menu_fms_islands"
+        name="Islands"
+        parent="menu_fms_configuration"
+        action="action_fms_island"
+        sequence="30"
+    />
+
+    <menuitem
+        id="menu_fms_pumps"
+        name="Pumps"
+        parent="menu_fms_configuration"
+        action="action_fms_pump"
+        sequence="40"
+    />
+
 </odoo>

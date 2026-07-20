@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fms_site_preferences_user,fms.site.preferences.user,model_fms_site_preferences,base.group_user,1,1,1,1
+access_fms_island_user,fms.island.user,model_fms_island,base.group_user,1,1,1,1
+access_fms_pump_user,fms.pump.user,model_fms_pump,base.group_user,1,1,1,1
+access_fms_pump_nozzle_user,fms.pump.nozzle.user,model_fms_pump_nozzle,base.group_user,1,1,1,1

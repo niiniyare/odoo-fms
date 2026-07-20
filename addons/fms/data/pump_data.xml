@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Shell Maanzoni forecourt equipment seed data (§1.3).
+
+        Layout per fms.md §1.3:
+          Island 3: U5 (UX), U6 (UX), L5 (DX), L6 (DX)
+          Island 4: U7 (UX), U8 (UX), L7 (DX), L8 (DX)
+
+        Pump naming convention: U = Unleaded (UX) nozzle, L = Diesel (DX) nozzle,
+        number = pump label used on the physical station and paper sheets.
+
+        Islands 1 and 2 exist as empty placeholders (no pumps currently assigned —
+        either reserved for V-Power dispensing expansion or inactive forecourt bays).
+
+        Tank references:
+          Tank 2 — Unleaded Extra  (fms.stock_location_tank2_unl)
+          Tank 3 — Diesel Extra    (fms.stock_location_tank3_ago)
+
+        Each pump at Shell Maanzoni has exactly one nozzle (nozzle_number = 1).
+    -->
+
+    <!-- ── Islands ──────────────────────────────────────────────────────── -->
+
+    <record id="island_1" model="fms.island">
+        <field name="name">Island 1</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="island_2" model="fms.island">
+        <field name="name">Island 2</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="island_3" model="fms.island">
+        <field name="name">Island 3</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="island_4" model="fms.island">
+        <field name="name">Island 4</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- ── Island 3 Pumps: U5, U6 (Unleaded), L5, L6 (Diesel) ─────────── -->
+
+    <record id="pump_u5" model="fms.pump">
+        <field name="name">U5</field>
+        <field name="island_id" ref="island_3"/>
+    </record>
+    <record id="nozzle_u5_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_u5"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank2_unl"/>
+    </record>
+
+    <record id="pump_u6" model="fms.pump">
+        <field name="name">U6</field>
+        <field name="island_id" ref="island_3"/>
+    </record>
+    <record id="nozzle_u6_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_u6"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank2_unl"/>
+    </record>
+
+    <record id="pump_l5" model="fms.pump">
+        <field name="name">L5</field>
+        <field name="island_id" ref="island_3"/>
+    </record>
+    <record id="nozzle_l5_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_l5"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank3_ago"/>
+    </record>
+
+    <record id="pump_l6" model="fms.pump">
+        <field name="name">L6</field>
+        <field name="island_id" ref="island_3"/>
+    </record>
+    <record id="nozzle_l6_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_l6"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank3_ago"/>
+    </record>
+
+    <!-- ── Island 4 Pumps: U7, U8 (Unleaded), L7, L8 (Diesel) ─────────── -->
+
+    <record id="pump_u7" model="fms.pump">
+        <field name="name">U7</field>
+        <field name="island_id" ref="island_4"/>
+    </record>
+    <record id="nozzle_u7_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_u7"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank2_unl"/>
+    </record>
+
+    <record id="pump_u8" model="fms.pump">
+        <field name="name">U8</field>
+        <field name="island_id" ref="island_4"/>
+    </record>
+    <record id="nozzle_u8_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_u8"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank2_unl"/>
+    </record>
+
+    <record id="pump_l7" model="fms.pump">
+        <field name="name">L7</field>
+        <field name="island_id" ref="island_4"/>
+    </record>
+    <record id="nozzle_l7_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_l7"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank3_ago"/>
+    </record>
+
+    <record id="pump_l8" model="fms.pump">
+        <field name="name">L8</field>
+        <field name="island_id" ref="island_4"/>
+    </record>
+    <record id="nozzle_l8_1" model="fms.pump.nozzle">
+        <field name="pump_id" ref="pump_l8"/>
+        <field name="nozzle_number">1</field>
+        <field name="tank_location_id" ref="stock_location_tank3_ago"/>
+    </record>
+
+</odoo>
