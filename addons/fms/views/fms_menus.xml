@@ -31,4 +31,12 @@
         sequence="10"
     />
 
+    <menuitem
+        id="menu_fms_site_preferences"
+        name="Site Preferences"
+        parent="menu_fms_configuration"
+        action="action_fms_site_preferences"
+        sequence="20"
+    />
+
 </odoo>

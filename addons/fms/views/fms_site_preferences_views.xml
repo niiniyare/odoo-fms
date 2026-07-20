@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── List view ──────────────────────────────────────────────────────── -->
+    <record id="view_fms_site_preferences_list" model="ir.ui.view">
+        <field name="name">fms.site.preferences.list</field>
+        <field name="model">fms.site.preferences</field>
+        <field name="arch" type="xml">
+            <list string="Site Preferences">
+                <field name="company_id"/>
+                <field name="wetstock_normal_pct" string="Wetstock Normal (%)"/>
+                <field name="wetstock_elevated_pct" string="Wetstock Elevated (%)"/>
+                <field name="cash_normal_kes" string="Cash Normal (KES)"/>
+                <field name="cash_elevated_kes" string="Cash Elevated (KES)"/>
+                <field name="meter_check_b_tamper_pct" string="Check B Tamper (%)"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Form view ──────────────────────────────────────────────────────── -->
+    <record id="view_fms_site_preferences_form" model="ir.ui.view">
+        <field name="name">fms.site.preferences.form</field>
+        <field name="model">fms.site.preferences</field>
+        <field name="arch" type="xml">
+            <form string="Site Preferences">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="company_id" placeholder="Company…"/>
+                        </h1>
+                    </div>
+
+                    <notebook>
+
+                        <!-- Meter Validation -->
+                        <page string="Meter Validation" name="meter_validation">
+                            <group string="Check A — Cash vs. Volume">
+                                <field name="meter_check_a_warn_kes"
+                                       string="Warning Threshold (KES)"
+                                       help="Discrepancy below this value = Pass; up to 20 = Warning; above 20 = Fail."/>
+                            </group>
+                            <group string="Check B — Electronic vs. Mechanical Volume">
+                                <field name="meter_check_b_warn_pct"
+                                       string="Warning Threshold (%)"/>
+                                <field name="meter_check_b_fail_pct"
+                                       string="Fail Threshold (%)"/>
+                                <field name="meter_check_b_tamper_pct"
+                                       string="Tamper / Auto-Lock Threshold (%)"/>
+                            </group>
+                        </page>
+
+                        <!-- Wetstock -->
+                        <page string="Wetstock" name="wetstock">
+                            <group string="Tank Variance Thresholds">
+                                <field name="wetstock_normal_pct"
+                                       string="Normal Threshold (%)"/>
+                                <field name="wetstock_elevated_pct"
+                                       string="Elevated Threshold (%)"/>
+                            </group>
+                        </page>
+
+                        <!-- Cash -->
+                        <page string="Cash" name="cash">
+                            <group string="Cash Variance Thresholds (KES)">
+                                <field name="cash_normal_kes"
+                                       string="Normal Threshold (KES)"/>
+                                <field name="cash_elevated_kes"
+                                       string="Elevated Threshold (KES)"/>
+                            </group>
+                            <group string="Cash Pickup">
+                                <field name="cash_pickup_threshold"
+                                       string="Pickup Trigger (KES)"/>
+                            </group>
+                        </page>
+
+                        <!-- Operations -->
+                        <page string="Operations" name="operations">
+                            <group string="Fuel Delivery">
+                                <field name="min_settle_minutes"
+                                       string="Post-Delivery Settle Time (min)"/>
+                            </group>
+                            <group string="Reporting">
+                                <field name="send_daily_summary"
+                                       string="Send Daily Summary Email"/>
+                                <field name="report_recipient_ids"
+                                       string="Email Recipients"
+                                       widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Window action ──────────────────────────────────────────────────── -->
+    <record id="action_fms_site_preferences" model="ir.actions.act_window">
+        <field name="name">Site Preferences</field>
+        <field name="res_model">fms.site.preferences</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No site preferences configured yet.
+            </p>
+            <p>
+                Create one record per station to define variance thresholds
+                and operational defaults.
+            </p>
+        </field>
+    </record>
+
+</odoo>
