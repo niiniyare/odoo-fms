@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add FMS fuel fields as a dedicated tab on the standard product form -->
+    <record id="view_product_template_fms_form" model="ir.ui.view">
+        <field name="name">product.template.fms.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page string="Forecourt (FMS)" name="fms_fuel">
+                    <group>
+                        <field name="fms_is_fuel_product" string="Is Fuel Product"/>
+                        <field name="fms_fuel_grade"
+                               string="Fuel Grade"
+                               invisible="not fms_is_fuel_product"
+                               required="fms_is_fuel_product"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

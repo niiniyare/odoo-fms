@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Fuel product seed data for Shell Maanzoni Service Station.
+
+        noupdate="1": these records are created on first install and never
+        overwritten on subsequent upgrades, so manual price/cost edits in the
+        UI survive make upgrade.
+
+        Costing: stock_account.product_category_avco (Average Cost, already
+        present in Odoo's stock_account demo/base data).
+
+        Product type: type='consu' + is_storable=True is Odoo 18's storable
+        product representation (the old type='product' was removed in 17+).
+
+        UoM: uom.product_uom_litre (L) — from the uom module.
+
+        Prices are Shell Maanzoni reference prices dated 17-05-2026 (§1.3).
+        Update via the Bulk Price Update wizard when EPRA publishes new rates.
+    -->
+
+    <!-- Unleaded Extra (PMS) — Tank 2 -->
+    <record id="product_fuel_pms_unl" model="product.template">
+        <field name="name">Unleaded Extra (PMS)</field>
+        <field name="default_code">FUEL-PMS-UNL</field>
+        <field name="type">consu</field>
+        <field name="is_storable">True</field>
+        <field name="uom_id" ref="uom.product_uom_litre"/>
+        <field name="uom_po_id" ref="uom.product_uom_litre"/>
+        <field name="categ_id" ref="stock_account.product_category_avco"/>
+        <field name="list_price">214.20</field>
+        <field name="fms_is_fuel_product">True</field>
+        <field name="fms_fuel_grade">UX</field>
+        <field name="sale_ok">True</field>
+        <field name="purchase_ok">True</field>
+    </record>
+
+    <!-- V-Power (PMS Premium) — Tank 1 -->
+    <record id="product_fuel_pms_vp" model="product.template">
+        <field name="name">V-Power (PMS Premium)</field>
+        <field name="default_code">FUEL-PMS-VP</field>
+        <field name="type">consu</field>
+        <field name="is_storable">True</field>
+        <field name="uom_id" ref="uom.product_uom_litre"/>
+        <field name="uom_po_id" ref="uom.product_uom_litre"/>
+        <field name="categ_id" ref="stock_account.product_category_avco"/>
+        <field name="list_price">229.00</field>
+        <field name="fms_is_fuel_product">True</field>
+        <field name="fms_fuel_grade">VP</field>
+        <field name="sale_ok">True</field>
+        <field name="purchase_ok">True</field>
+    </record>
+
+    <!-- Diesel Extra (AGO) — Tank 3 -->
+    <record id="product_fuel_ago" model="product.template">
+        <field name="name">Diesel Extra (AGO)</field>
+        <field name="default_code">FUEL-AGO</field>
+        <field name="type">consu</field>
+        <field name="is_storable">True</field>
+        <field name="uom_id" ref="uom.product_uom_litre"/>
+        <field name="uom_po_id" ref="uom.product_uom_litre"/>
+        <field name="categ_id" ref="stock_account.product_category_avco"/>
+        <field name="list_price">242.90</field>
+        <field name="fms_is_fuel_product">True</field>
+        <field name="fms_fuel_grade">DX</field>
+        <field name="sale_ok">True</field>
+        <field name="purchase_ok">True</field>
+    </record>
+
+</odoo>
