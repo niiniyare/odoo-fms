@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Shell Maanzoni fuel tank seed data.
+
+        noupdate="1": survives make upgrade — manual capacity corrections
+        and PTS-2 number assignments in the UI are preserved.
+
+        Parent: stock.stock_location_stock (WH/Stock) — the default internal
+        stock location for the warehouse created on first Odoo boot.
+
+        Tank capacities are placeholder values pending the EPRA-certified
+        strapping table for Shell Maanzoni (§9.14 open requirement).
+        Update fms_capacity_litres to the certified figure once available.
+
+        fms_fuel_product_id uses the search= attribute to look up the
+        product.product variant by internal reference (no pre-existing XML
+        ID is needed for single-variant products).
+
+        PTS-2 tank numbers match the LOG/USER PORT probe wiring order
+        documented in pts-2.md §4.7: tank 1 = probe slot 1, etc.
+    -->
+
+    <!-- Tank 1 — V-Power (FUEL-PMS-VP) -->
+    <record id="stock_location_tank1_vp" model="stock.location">
+        <field name="name">Tank 1 — V-Power</field>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="usage">internal</field>
+        <field name="fms_is_fuel_tank">True</field>
+        <field name="fms_capacity_litres">15000.0</field>
+        <field name="fms_pts2_tank_number">1</field>
+        <field name="fms_fuel_product_id"
+               model="product.product"
+               search="[('default_code', '=', 'FUEL-PMS-VP')]"/>
+    </record>
+
+    <!-- Tank 2 — Unleaded Extra (FUEL-PMS-UNL) -->
+    <record id="stock_location_tank2_unl" model="stock.location">
+        <field name="name">Tank 2 — Unleaded Extra</field>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="usage">internal</field>
+        <field name="fms_is_fuel_tank">True</field>
+        <field name="fms_capacity_litres">20000.0</field>
+        <field name="fms_pts2_tank_number">2</field>
+        <field name="fms_fuel_product_id"
+               model="product.product"
+               search="[('default_code', '=', 'FUEL-PMS-UNL')]"/>
+    </record>
+
+    <!-- Tank 3 — Diesel Extra (FUEL-AGO) -->
+    <record id="stock_location_tank3_ago" model="stock.location">
+        <field name="name">Tank 3 — Diesel Extra</field>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="usage">internal</field>
+        <field name="fms_is_fuel_tank">True</field>
+        <field name="fms_capacity_litres">20000.0</field>
+        <field name="fms_pts2_tank_number">3</field>
+        <field name="fms_fuel_product_id"
+               model="product.product"
+               search="[('default_code', '=', 'FUEL-AGO')]"/>
+    </record>
+
+</odoo>

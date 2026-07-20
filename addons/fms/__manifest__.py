@@ -7,9 +7,11 @@
         "security/ir.model.access.csv",
         # 2. Seed data (noupdate=1 — created once, never overwritten on upgrade)
         "data/product_data.xml",
-        # 3. Views + actions (before menus reference action IDs)
+        "data/tank_data.xml",
+        # 3. Views + actions (actions must exist before menus reference them)
         "views/fms_site_preferences_views.xml",
         "views/product_template_views.xml",
+        "views/stock_location_views.xml",
         # 4. Menus last
         "views/fms_menus.xml",
     ],
