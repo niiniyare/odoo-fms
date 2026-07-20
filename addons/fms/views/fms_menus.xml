@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root application menu -->
+    <menuitem
+        id="menu_fms_root"
+        name="Forecourt Station"
+        sequence="50"
+    />
+
+    <!-- Placeholder action — opens native res.company list/form (replaced in Task 1.1) -->
+    <record id="action_fms_placeholder_companies" model="ir.actions.act_window">
+        <field name="name">Companies</field>
+        <field name="res_model">res.company</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- First-level menu item under Forecourt Station -->
+    <menuitem
+        id="menu_fms_configuration"
+        name="Configuration"
+        parent="menu_fms_root"
+        sequence="90"
+    />
+
+    <menuitem
+        id="menu_fms_companies"
+        name="Companies"
+        parent="menu_fms_configuration"
+        action="action_fms_placeholder_companies"
+        sequence="10"
+    />
+
+</odoo>
