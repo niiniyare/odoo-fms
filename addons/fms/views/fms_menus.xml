@@ -15,7 +15,23 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <!-- First-level menu item under Forecourt Station -->
+    <!-- Operations — day-to-day shift management -->
+    <menuitem
+        id="menu_fms_operations"
+        name="Operations"
+        parent="menu_fms_root"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_fms_shifts"
+        name="Shifts"
+        parent="menu_fms_operations"
+        action="action_fms_shift"
+        sequence="10"
+    />
+
+    <!-- Configuration — master data setup -->
     <menuitem
         id="menu_fms_configuration"
         name="Configuration"

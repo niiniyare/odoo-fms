@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.shift — list view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_shift_list" model="ir.ui.view">
+        <field name="name">fms.shift.list</field>
+        <field name="model">fms.shift</field>
+        <field name="arch" type="xml">
+            <list string="Shifts" decoration-info="state == 'draft'"
+                  decoration-warning="state in ('readings_pending', 'closing')"
+                  decoration-success="state == 'open'"
+                  decoration-muted="state == 'closed'"
+                  decoration-danger="state == 'disputed'">
+                <field name="name"/>
+                <field name="shift_date"/>
+                <field name="shift_label"/>
+                <field name="supervisor_id"/>
+                <field name="opened_at"/>
+                <field name="closed_at"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"
+                       widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state in ('readings_pending', 'closing')"
+                       decoration-success="state == 'open'"
+                       decoration-muted="state == 'closed'"
+                       decoration-danger="state == 'disputed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.shift — form view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_shift_form" model="ir.ui.view">
+        <field name="name">fms.shift.form</field>
+        <field name="model">fms.shift</field>
+        <field name="arch" type="xml">
+            <form string="Shift">
+                <header>
+                    <button name="action_start_readings" string="Start Readings"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_open" string="Open Shift"
+                            type="object" class="btn-primary"
+                            invisible="state != 'readings_pending'"/>
+                    <button name="action_start_closing" string="Start Closing"
+                            type="object" class="btn-primary"
+                            invisible="state != 'open'"/>
+                    <button name="action_reopen" string="Reopen"
+                            type="object"
+                            invisible="state != 'closing'"/>
+                    <button name="action_close" string="Close Shift"
+                            type="object" class="btn-primary"
+                            invisible="state != 'closing'"/>
+                    <button name="action_mark_disputed" string="Mark Disputed"
+                            type="object" class="btn-danger"
+                            invisible="state != 'closed'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,readings_pending,open,closing,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Scheduling">
+                            <field name="shift_date"/>
+                            <field name="shift_label"/>
+                            <field name="company_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Personnel">
+                            <field name="supervisor_id"/>
+                            <field name="opened_by" readonly="1"/>
+                            <field name="closed_by" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Timing"
+                           invisible="state == 'draft'">
+                        <field name="opened_at" readonly="1"/>
+                        <field name="closed_at" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Cashier Sessions" name="cashier_sessions">
+                            <field name="cashier_session_ids" readonly="1">
+                                <list>
+                                    <field name="id" string="#"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.shift — search view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_shift_search" model="ir.ui.view">
+        <field name="name">fms.shift.search</field>
+        <field name="model">fms.shift</field>
+        <field name="arch" type="xml">
+            <search string="Shifts">
+                <field name="name" string="Reference"/>
+                <field name="shift_date"/>
+                <field name="supervisor_id"/>
+                <separator/>
+                <filter name="filter_draft"            string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_readings_pending" string="Readings Pending"
+                        domain="[('state', '=', 'readings_pending')]"/>
+                <filter name="filter_open"             string="Open"
+                        domain="[('state', '=', 'open')]"/>
+                <filter name="filter_closing"          string="Closing"
+                        domain="[('state', '=', 'closing')]"/>
+                <filter name="filter_closed"           string="Closed"
+                        domain="[('state', '=', 'closed')]"/>
+                <filter name="filter_disputed"         string="Disputed"
+                        domain="[('state', '=', 'disputed')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today"
+                        domain="[('shift_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_date"   string="Date"
+                            context="{'group_by': 'shift_date'}"/>
+                    <filter name="group_state"  string="State"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_label"  string="Shift"
+                            context="{'group_by': 'shift_label'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         Window action
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="action_fms_shift" model="ir.actions.act_window">
+        <field name="name">Shifts</field>
+        <field name="res_model">fms.shift</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_fms_shift_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No shifts yet.</p>
+            <p>Create a shift to start recording meter readings, dip readings,
+               and cash transactions for each operational period.</p>
+        </field>
+    </record>
+
+</odoo>

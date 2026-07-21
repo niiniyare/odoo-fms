@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="seq_fms_shift" model="ir.sequence">
+        <field name="name">FMS Shift</field>
+        <field name="code">fms.shift</field>
+        <field name="prefix">SHIFT-%(year)s-</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+</odoo>

@@ -6,6 +6,7 @@
         # 1. Security — ACLs before views reference model_ids
         "security/ir.model.access.csv",
         # 2. Seed data (noupdate=1 — created once, never overwritten on upgrade)
+        "data/ir_sequence_data.xml",
         "data/product_data.xml",
         "data/tank_data.xml",
         "data/pump_data.xml",
@@ -16,6 +17,7 @@
         "views/stock_location_views.xml",
         "views/fms_pump_views.xml",
         "views/fms_calibration_chart_views.xml",
+        "views/fms_shift_views.xml",
         # 4. Menus last
         "views/fms_menus.xml",
     ],
