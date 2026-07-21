@@ -55,4 +55,12 @@
         sequence="40"
     />
 
+    <menuitem
+        id="menu_fms_calibration_charts"
+        name="Tank Calibration Charts"
+        parent="menu_fms_configuration"
+        action="action_fms_calibration_chart"
+        sequence="50"
+    />
+
 </odoo>

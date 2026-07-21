@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        PLACEHOLDER CALIBRATION CHARTS — Shell Maanzoni
+        ================================================
+        These are DEMONSTRATION VALUES ONLY.
+
+        They are NOT EPRA-certified calibration data.  Do NOT use these figures
+        for operational fuel reconciliation, regulatory reporting, or any
+        compliance purpose.
+
+        Replace each chart's lines with the official certified strapping table
+        supplied by the licensed calibrator before going live.
+
+        The dip heights (mm) and volumes (L) below were approximated from the
+        nominal tank capacities to give a realistic curve shape for development
+        and UI testing purposes only.
+    -->
+
+    <!-- ── Tank 1 — Super Premium (V-Power) — 10,000 L ─────────────────── -->
+
+    <record id="calib_chart_tank1_vp" model="fms.tank.calibration.chart">
+        <field name="name">Tank 1 – V-Power (PLACEHOLDER)</field>
+        <field name="tank_location_id" ref="stock_location_tank1_vp"/>
+        <field name="certificate_number">PLACEHOLDER-T1-2026</field>
+        <field name="calibration_date">2026-01-01</field>
+        <field name="capacity_litres">10000.0</field>
+    </record>
+
+    <record id="calib_line_t1_0" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">0</field>
+        <field name="volume_litres">0.0</field>
+    </record>
+    <record id="calib_line_t1_200" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">200</field>
+        <field name="volume_litres">800.0</field>
+    </record>
+    <record id="calib_line_t1_400" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">400</field>
+        <field name="volume_litres">2200.0</field>
+    </record>
+    <record id="calib_line_t1_600" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">600</field>
+        <field name="volume_litres">4200.0</field>
+    </record>
+    <record id="calib_line_t1_800" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">800</field>
+        <field name="volume_litres">6500.0</field>
+    </record>
+    <record id="calib_line_t1_1000" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">1000</field>
+        <field name="volume_litres">8500.0</field>
+    </record>
+    <record id="calib_line_t1_1200" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank1_vp"/>
+        <field name="dip_height_mm">1200</field>
+        <field name="volume_litres">10000.0</field>
+    </record>
+
+    <!-- ── Tank 2 — Unleaded Extra (PMS/UNL) — 25,000 L ────────────────── -->
+
+    <record id="calib_chart_tank2_unl" model="fms.tank.calibration.chart">
+        <field name="name">Tank 2 – Unleaded Extra (PLACEHOLDER)</field>
+        <field name="tank_location_id" ref="stock_location_tank2_unl"/>
+        <field name="certificate_number">PLACEHOLDER-T2-2026</field>
+        <field name="calibration_date">2026-01-01</field>
+        <field name="capacity_litres">25000.0</field>
+    </record>
+
+    <record id="calib_line_t2_0" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">0</field>
+        <field name="volume_litres">0.0</field>
+    </record>
+    <record id="calib_line_t2_300" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">300</field>
+        <field name="volume_litres">2100.0</field>
+    </record>
+    <record id="calib_line_t2_600" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">600</field>
+        <field name="volume_litres">5500.0</field>
+    </record>
+    <record id="calib_line_t2_900" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">900</field>
+        <field name="volume_litres">10500.0</field>
+    </record>
+    <record id="calib_line_t2_1200" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">1200</field>
+        <field name="volume_litres">16000.0</field>
+    </record>
+    <record id="calib_line_t2_1500" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">1500</field>
+        <field name="volume_litres">21000.0</field>
+    </record>
+    <record id="calib_line_t2_1700" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank2_unl"/>
+        <field name="dip_height_mm">1700</field>
+        <field name="volume_litres">25000.0</field>
+    </record>
+
+    <!-- ── Tank 3 — Diesel Extra (AGO) — 20,000 L ───────────────────────── -->
+
+    <record id="calib_chart_tank3_ago" model="fms.tank.calibration.chart">
+        <field name="name">Tank 3 – Diesel Extra (PLACEHOLDER)</field>
+        <field name="tank_location_id" ref="stock_location_tank3_ago"/>
+        <field name="certificate_number">PLACEHOLDER-T3-2026</field>
+        <field name="calibration_date">2026-01-01</field>
+        <field name="capacity_litres">20000.0</field>
+    </record>
+
+    <record id="calib_line_t3_0" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">0</field>
+        <field name="volume_litres">0.0</field>
+    </record>
+    <record id="calib_line_t3_250" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">250</field>
+        <field name="volume_litres">1600.0</field>
+    </record>
+    <record id="calib_line_t3_500" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">500</field>
+        <field name="volume_litres">4500.0</field>
+    </record>
+    <record id="calib_line_t3_750" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">750</field>
+        <field name="volume_litres">8500.0</field>
+    </record>
+    <record id="calib_line_t3_1000" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">1000</field>
+        <field name="volume_litres">13000.0</field>
+    </record>
+    <record id="calib_line_t3_1250" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">1250</field>
+        <field name="volume_litres">17000.0</field>
+    </record>
+    <record id="calib_line_t3_1450" model="fms.tank.calibration.chart.line">
+        <field name="calibration_chart_id" ref="calib_chart_tank3_ago"/>
+        <field name="dip_height_mm">1450</field>
+        <field name="volume_litres">20000.0</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.tank.calibration.chart — list view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_calibration_chart_list" model="ir.ui.view">
+        <field name="name">fms.tank.calibration.chart.list</field>
+        <field name="model">fms.tank.calibration.chart</field>
+        <field name="arch" type="xml">
+            <list string="Tank Calibration Charts">
+                <field name="name"/>
+                <field name="tank_location_id"/>
+                <field name="certificate_number"/>
+                <field name="calibration_date"/>
+                <field name="capacity_litres" string="Capacity (L)"/>
+                <field name="line_count" string="Lines"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.tank.calibration.chart — form view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_calibration_chart_form" model="ir.ui.view">
+        <field name="name">fms.tank.calibration.chart.form</field>
+        <field name="model">fms.tank.calibration.chart</field>
+        <field name="arch" type="xml">
+            <form string="Tank Calibration Chart">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Chart Name…"/></h1>
+                    </div>
+                    <group>
+                        <group string="Tank">
+                            <field name="tank_location_id"
+                                   domain="[('fms_is_fuel_tank', '=', True)]"
+                                   options="{'no_create': True}"/>
+                            <field name="company_id" readonly="1"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Certificate">
+                            <field name="certificate_number"/>
+                            <field name="calibration_date"/>
+                            <field name="capacity_litres"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Strapping Table" name="lines">
+                            <field name="line_ids">
+                                <list string="Calibration Lines" editable="bottom"
+                                      default_order="dip_height_mm">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="dip_height_mm" string="Dip Height (mm)"/>
+                                    <field name="volume_litres" string="Volume (L)"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         Window action + menu
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="action_fms_calibration_chart" model="ir.actions.act_window">
+        <field name="name">Tank Calibration Charts</field>
+        <field name="res_model">fms.tank.calibration.chart</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No calibration charts yet.</p>
+            <p>Create one chart per fuel tank, populated with certified strapping
+               table data from the EPRA-licensed calibrator.</p>
+        </field>
+    </record>
+
+</odoo>

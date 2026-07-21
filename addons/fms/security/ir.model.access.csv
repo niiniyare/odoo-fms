@@ -3,3 +3,5 @@ access_fms_site_preferences_user,fms.site.preferences.user,model_fms_site_prefer
 access_fms_island_user,fms.island.user,model_fms_island,base.group_user,1,1,1,1
 access_fms_pump_user,fms.pump.user,model_fms_pump,base.group_user,1,1,1,1
 access_fms_pump_nozzle_user,fms.pump.nozzle.user,model_fms_pump_nozzle,base.group_user,1,1,1,1
+access_fms_tank_calibration_chart_user,fms.tank.calibration.chart.user,model_fms_tank_calibration_chart,base.group_user,1,1,1,1
+access_fms_tank_calibration_chart_line_user,fms.tank.calibration.chart.line.user,model_fms_tank_calibration_chart_line,base.group_user,1,1,1,1
