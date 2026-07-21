@@ -7,3 +7,4 @@ from . import fms_pump_nozzle
 from . import fms_tank_calibration_chart
 from . import fms_cashier_session
 from . import fms_shift
+from . import fms_meter_reading

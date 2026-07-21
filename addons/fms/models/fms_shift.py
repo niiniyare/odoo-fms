@@ -136,8 +136,21 @@ class FmsShift(models.Model):
         "shift_id",
         string="Cashier Sessions",
     )
+    meter_reading_ids = fields.One2many(
+        "fms.meter.reading",
+        "shift_id",
+        string="Meter Readings",
+    )
+    meter_reading_count = fields.Integer(
+        string="Meter Readings",
+        compute="_compute_meter_reading_count",
+    )
 
     # ── Computed helpers ──────────────────────────────────────────────────
+
+    def _compute_meter_reading_count(self):
+        for rec in self:
+            rec.meter_reading_count = len(rec.meter_reading_ids)
 
     shift_label_display = fields.Char(
         string="Shift Label",
@@ -212,6 +225,17 @@ class FmsShift(models.Model):
     def action_mark_disputed(self):
         """Closed → Disputed."""
         self.write({"state": "disputed"})
+
+    def action_view_meter_readings(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Meter Readings"),
+            "res_model": "fms.meter.reading",
+            "view_mode": "list,form",
+            "domain": [("shift_id", "=", self.id)],
+            "context": {"default_shift_id": self.id},
+        }
 
     # ── Constraints ───────────────────────────────────────────────────────
 

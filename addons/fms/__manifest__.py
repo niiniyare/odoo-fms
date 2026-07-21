@@ -18,6 +18,7 @@
         "views/fms_pump_views.xml",
         "views/fms_calibration_chart_views.xml",
         "views/fms_shift_views.xml",
+        "views/fms_meter_reading_views.xml",
         # 4. Menus last
         "views/fms_menus.xml",
     ],

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.meter.reading — list view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_meter_reading_list" model="ir.ui.view">
+        <field name="name">fms.meter.reading.list</field>
+        <field name="model">fms.meter.reading</field>
+        <field name="arch" type="xml">
+            <list string="Meter Readings"
+                  decoration-muted="state == 'confirmed'">
+                <field name="shift_id"/>
+                <field name="reading_type" widget="badge"
+                       decoration-info="reading_type == 'opening'"
+                       decoration-warning="reading_type == 'closing'"/>
+                <field name="pump_id"/>
+                <field name="nozzle_id" string="Nozzle"/>
+                <field name="totalizer_litres" string="Totalizer (L)"/>
+                <field name="reading_time"/>
+                <field name="recorded_by"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'draft'"
+                       decoration-success="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.meter.reading — form view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_meter_reading_form" model="ir.ui.view">
+        <field name="name">fms.meter.reading.form</field>
+        <field name="model">fms.meter.reading</field>
+        <field name="arch" type="xml">
+            <form string="Meter Reading">
+                <header>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"
+                            confirm="Confirming locks this reading permanently. Continue?"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Shift">
+                            <field name="shift_id"
+                                   domain="[('state', 'not in', ['closed', 'disputed'])]"
+                                   options="{'no_create': True}"/>
+                            <field name="reading_type"/>
+                            <field name="reading_time"/>
+                            <field name="recorded_by" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Equipment">
+                            <field name="nozzle_id"
+                                   domain="[('active', '=', True)]"
+                                   options="{'no_create': True}"/>
+                            <field name="pump_id" readonly="1"/>
+                            <field name="tank_location_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Reading">
+                        <field name="totalizer_litres" string="Totalizer (L)"/>
+                        <field name="confirmed_at" readonly="1"
+                               invisible="state != 'confirmed'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         fms.meter.reading — search view
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fms_meter_reading_search" model="ir.ui.view">
+        <field name="name">fms.meter.reading.search</field>
+        <field name="model">fms.meter.reading</field>
+        <field name="arch" type="xml">
+            <search string="Meter Readings">
+                <field name="shift_id"/>
+                <field name="pump_id"/>
+                <field name="nozzle_id"/>
+                <separator/>
+                <filter name="filter_opening"  string="Opening"
+                        domain="[('reading_type', '=', 'opening')]"/>
+                <filter name="filter_closing"  string="Closing"
+                        domain="[('reading_type', '=', 'closing')]"/>
+                <separator/>
+                <filter name="filter_draft"     string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_confirmed" string="Confirmed"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_shift"  string="Shift"
+                            context="{'group_by': 'shift_id'}"/>
+                    <filter name="group_pump"   string="Pump"
+                            context="{'group_by': 'pump_id'}"/>
+                    <filter name="group_type"   string="Type"
+                            context="{'group_by': 'reading_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         Window action
+    ══════════════════════════════════════════════════════════════════════ -->
+
+    <record id="action_fms_meter_reading" model="ir.actions.act_window">
+        <field name="name">Meter Readings</field>
+        <field name="res_model">fms.meter.reading</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_fms_meter_reading_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No meter readings yet.</p>
+            <p>Open a shift and record opening totalizer values for each nozzle.</p>
+        </field>
+    </record>
+
+</odoo>

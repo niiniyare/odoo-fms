@@ -64,6 +64,15 @@
                            statusbar_visible="draft,readings_pending,open,closing,closed"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_meter_readings"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-tachometer">
+                            <field name="meter_reading_count" widget="statinfo"
+                                   string="Meter Readings"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
@@ -85,6 +94,28 @@
                         <field name="closed_at" readonly="1"/>
                     </group>
                     <notebook>
+                        <page string="Meter Readings" name="meter_readings">
+                            <field name="meter_reading_ids">
+                                <list string="Meter Readings" editable="bottom"
+                                      decoration-muted="state == 'confirmed'">
+                                    <field name="reading_type" string="Type"/>
+                                    <field name="nozzle_id" string="Nozzle"
+                                           domain="[('active', '=', True)]"
+                                           options="{'no_create': True}"/>
+                                    <field name="pump_id" string="Pump" readonly="1"/>
+                                    <field name="totalizer_litres" string="Totalizer (L)"/>
+                                    <field name="reading_time" string="Time"/>
+                                    <field name="recorded_by" string="Recorded By"
+                                           options="{'no_create': True}"/>
+                                    <field name="state" widget="badge"
+                                           decoration-warning="state == 'draft'"
+                                           decoration-success="state == 'confirmed'"/>
+                                    <button name="action_confirm" type="object"
+                                            icon="fa-check" title="Confirm"
+                                            invisible="state != 'draft'"/>
+                                </list>
+                            </field>
+                        </page>
                         <page string="Cashier Sessions" name="cashier_sessions">
                             <field name="cashier_session_ids" readonly="1">
                                 <list>

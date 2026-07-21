@@ -31,6 +31,14 @@
         sequence="10"
     />
 
+    <menuitem
+        id="menu_fms_meter_readings"
+        name="Meter Readings"
+        parent="menu_fms_operations"
+        action="action_fms_meter_reading"
+        sequence="20"
+    />
+
     <!-- Configuration — master data setup -->
     <menuitem
         id="menu_fms_configuration"

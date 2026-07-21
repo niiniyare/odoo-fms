@@ -7,3 +7,4 @@ access_fms_tank_calibration_chart_user,fms.tank.calibration.chart.user,model_fms
 access_fms_tank_calibration_chart_line_user,fms.tank.calibration.chart.line.user,model_fms_tank_calibration_chart_line,base.group_user,1,1,1,1
 access_fms_shift_user,fms.shift.user,model_fms_shift,base.group_user,1,1,1,1
 access_fms_cashier_session_user,fms.cashier.session.user,model_fms_cashier_session,base.group_user,1,1,1,1
+access_fms_meter_reading_user,fms.meter.reading.user,model_fms_meter_reading,base.group_user,1,1,1,1
