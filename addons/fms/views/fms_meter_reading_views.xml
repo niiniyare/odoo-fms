@@ -17,7 +17,12 @@
                        decoration-warning="reading_type == 'closing'"/>
                 <field name="pump_id"/>
                 <field name="nozzle_id" string="Nozzle"/>
+                <field name="fuel_product_id" string="Fuel"/>
                 <field name="totalizer_litres" string="Totalizer (L)"/>
+                <field name="opening_totalizer_litres" string="Opening (L)"
+                       optional="show"/>
+                <field name="dispensed_litres" string="Dispensed (L)"
+                       optional="show"/>
                 <field name="reading_time"/>
                 <field name="recorded_by"/>
                 <field name="state" widget="badge"
@@ -60,10 +65,17 @@
                                    options="{'no_create': True}"/>
                             <field name="pump_id" readonly="1"/>
                             <field name="tank_location_id" readonly="1"/>
+                            <field name="fuel_product_id" readonly="1"/>
                         </group>
                     </group>
-                    <group string="Reading">
+                    <group string="Totalizer">
                         <field name="totalizer_litres" string="Totalizer (L)"/>
+                        <field name="opening_totalizer_litres" string="Opening Totalizer (L)"
+                               readonly="1"
+                               invisible="reading_type != 'closing'"/>
+                        <field name="dispensed_litres" string="Dispensed (L)"
+                               readonly="1"
+                               invisible="reading_type != 'closing'"/>
                         <field name="confirmed_at" readonly="1"
                                invisible="state != 'confirmed'"/>
                     </group>
@@ -84,10 +96,11 @@
                 <field name="shift_id"/>
                 <field name="pump_id"/>
                 <field name="nozzle_id"/>
+                <field name="fuel_product_id"/>
                 <separator/>
-                <filter name="filter_opening"  string="Opening"
+                <filter name="filter_opening"   string="Opening"
                         domain="[('reading_type', '=', 'opening')]"/>
-                <filter name="filter_closing"  string="Closing"
+                <filter name="filter_closing"   string="Closing"
                         domain="[('reading_type', '=', 'closing')]"/>
                 <separator/>
                 <filter name="filter_draft"     string="Draft"
@@ -95,11 +108,13 @@
                 <filter name="filter_confirmed" string="Confirmed"
                         domain="[('state', '=', 'confirmed')]"/>
                 <group expand="0" string="Group By">
-                    <filter name="group_shift"  string="Shift"
+                    <filter name="group_shift"   string="Shift"
                             context="{'group_by': 'shift_id'}"/>
-                    <filter name="group_pump"   string="Pump"
+                    <filter name="group_pump"    string="Pump"
                             context="{'group_by': 'pump_id'}"/>
-                    <filter name="group_type"   string="Type"
+                    <filter name="group_product" string="Fuel Product"
+                            context="{'group_by': 'fuel_product_id'}"/>
+                    <filter name="group_type"    string="Type"
                             context="{'group_by': 'reading_type'}"/>
                 </group>
             </search>

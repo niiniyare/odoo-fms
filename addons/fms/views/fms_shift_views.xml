@@ -93,6 +93,10 @@
                         <field name="opened_at" readonly="1"/>
                         <field name="closed_at" readonly="1"/>
                     </group>
+                    <group string="Dispensed Volume"
+                           invisible="state not in ['closing', 'closed', 'disputed']">
+                        <field name="total_dispensed_litres" readonly="1"/>
+                    </group>
                     <notebook>
                         <page string="Meter Readings" name="meter_readings">
                             <field name="meter_reading_ids">
@@ -104,6 +108,10 @@
                                            options="{'no_create': True}"/>
                                     <field name="pump_id" string="Pump" readonly="1"/>
                                     <field name="totalizer_litres" string="Totalizer (L)"/>
+                                    <field name="opening_totalizer_litres" string="Opening (L)"
+                                           optional="show"/>
+                                    <field name="dispensed_litres" string="Dispensed (L)"
+                                           optional="show"/>
                                     <field name="reading_time" string="Time"/>
                                     <field name="recorded_by" string="Recorded By"
                                            options="{'no_create': True}"/>

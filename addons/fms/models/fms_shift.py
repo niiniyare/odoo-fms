@@ -145,12 +145,30 @@ class FmsShift(models.Model):
         string="Meter Readings",
         compute="_compute_meter_reading_count",
     )
+    total_dispensed_litres = fields.Float(
+        string="Total Dispensed (L)",
+        digits=(16, 3),
+        compute="_compute_total_dispensed_litres",
+        store=True,
+        help="Sum of confirmed closing reading dispensed_litres across all nozzles "
+             "in this shift.  Updates automatically when a closing reading is confirmed.",
+    )
 
     # ── Computed helpers ──────────────────────────────────────────────────
 
     def _compute_meter_reading_count(self):
         for rec in self:
             rec.meter_reading_count = len(rec.meter_reading_ids)
+
+    @api.depends("meter_reading_ids.dispensed_litres", "meter_reading_ids.state",
+                 "meter_reading_ids.reading_type")
+    def _compute_total_dispensed_litres(self):
+        for rec in self:
+            rec.total_dispensed_litres = sum(
+                r.dispensed_litres
+                for r in rec.meter_reading_ids
+                if r.reading_type == "closing" and r.state == "confirmed"
+            )
 
     shift_label_display = fields.Char(
         string="Shift Label",

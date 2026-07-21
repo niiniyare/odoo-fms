@@ -5,12 +5,12 @@ from odoo.exceptions import UserError, ValidationError
 class FmsMeterReading(models.Model):
     """Totalizer reading taken from a pump nozzle at the start or end of a shift.
 
-    The opening reading is the baseline from which fuel sold during the shift
-    is calculated.  Once confirmed the record is locked — all edits are rejected
-    by the write() override.
+    Opening reading  — baseline captured when the shift begins.
+    Closing reading  — captured when the shift moves to 'closing' state.
+    dispensed_litres — closing minus opening; only populated once both sides
+                       are confirmed.
 
-    Closing readings (reading_type='closing') are recorded in a later task;
-    the model supports them structurally so no migration is required then.
+    Once confirmed the record is fully locked (write() override).
     """
 
     _name = "fms.meter.reading"
@@ -64,6 +64,13 @@ class FmsMeterReading(models.Model):
         store=True,
         help="Fuel tank this nozzle draws from — derived from the nozzle.",
     )
+    fuel_product_id = fields.Many2one(
+        "product.product",
+        string="Fuel Product",
+        related="nozzle_id.fuel_product_id",
+        store=True,
+        help="Fuel grade dispensed — derived from the nozzle's tank.",
+    )
 
     # ── Reading ───────────────────────────────────────────────────────────
 
@@ -85,7 +92,7 @@ class FmsMeterReading(models.Model):
         digits=(16, 3),
         help="Cumulative lifetime totalizer counter on the pump's electronic meter "
              "at the time of reading (litres).  This counter never resets — it only "
-             "increases or (on meter replacement) restarts from 0.",
+             "increases (or restarts from 0 on meter replacement).",
     )
     reading_time = fields.Datetime(
         string="Reading Time",
@@ -98,6 +105,25 @@ class FmsMeterReading(models.Model):
         string="Recorded By",
         default=lambda self: self.env.uid,
         help="User who entered this reading.",
+    )
+
+    # ── Dispensed volume (populated on closing readings once confirmed) ────
+
+    opening_totalizer_litres = fields.Float(
+        string="Opening Totalizer (L)",
+        digits=(16, 3),
+        readonly=True,
+        copy=False,
+        help="Confirmed opening totalizer for this nozzle in this shift.  "
+             "Populated automatically when a closing reading is confirmed.",
+    )
+    dispensed_litres = fields.Float(
+        string="Dispensed (L)",
+        digits=(16, 3),
+        readonly=True,
+        copy=False,
+        help="Litres dispensed this shift = closing totalizer − opening totalizer.  "
+             "Calculated and stored when the closing reading is confirmed.",
     )
 
     # ── Status ────────────────────────────────────────────────────────────
@@ -136,8 +162,8 @@ class FmsMeterReading(models.Model):
     # ── ORM overrides ─────────────────────────────────────────────────────
 
     def write(self, vals):
-        # Lock confirmed readings — no field may be changed except state
-        # transitions driven by action_confirm() itself.
+        # Lock confirmed readings.  action_confirm() bypasses this by calling
+        # super().write() directly.
         if "state" not in vals or vals.get("state") == "confirmed":
             for rec in self:
                 if rec.state == "confirmed":
@@ -153,21 +179,68 @@ class FmsMeterReading(models.Model):
     # ── Transition action ─────────────────────────────────────────────────
 
     def action_confirm(self):
-        """Draft → Confirmed.  Stamps confirmed_at and locks the record."""
+        """Draft → Confirmed.
+
+        For closing readings:
+          • Verifies a confirmed opening reading exists for this nozzle/shift.
+          • Verifies closing totalizer ≥ opening totalizer.
+          • Stores opening_totalizer_litres and dispensed_litres.
+        Stamps confirmed_at and locks the record for all reading types.
+        """
         for rec in self:
             if rec.state == "confirmed":
                 continue
-            # Call super().write() directly to bypass our own lock guard above
-            super(FmsMeterReading, rec).write({
+
+            update_vals = {
                 "state":        "confirmed",
                 "confirmed_at": fields.Datetime.now(),
-            })
+            }
+
+            if rec.reading_type == "closing":
+                opening = self.search([
+                    ("shift_id",     "=", rec.shift_id.id),
+                    ("nozzle_id",    "=", rec.nozzle_id.id),
+                    ("reading_type", "=", "opening"),
+                    ("state",        "=", "confirmed"),
+                ], limit=1)
+
+                if not opening:
+                    raise ValidationError(
+                        _(
+                            "Cannot confirm closing reading for nozzle %(nozzle)s "
+                            "on shift '%(shift)s': no confirmed opening reading "
+                            "exists for this nozzle.",
+                            nozzle=f"{rec.nozzle_id.pump_id.name}/N{rec.nozzle_id.nozzle_number}",
+                            shift=rec.shift_id.name,
+                        )
+                    )
+
+                dispensed = rec.totalizer_litres - opening.totalizer_litres
+                if dispensed < 0:
+                    raise ValidationError(
+                        _(
+                            "Closing totalizer %(close).3f L is less than the "
+                            "opening totalizer %(open).3f L for nozzle %(nozzle)s "
+                            "on shift '%(shift)s'.  Dispensed litres cannot be "
+                            "negative.",
+                            close=rec.totalizer_litres,
+                            open=opening.totalizer_litres,
+                            nozzle=f"{rec.nozzle_id.pump_id.name}/N{rec.nozzle_id.nozzle_number}",
+                            shift=rec.shift_id.name,
+                        )
+                    )
+
+                update_vals["opening_totalizer_litres"] = opening.totalizer_litres
+                update_vals["dispensed_litres"] = dispensed
+
+            # Bypass the lock guard — we are the one setting confirmed state
+            super(FmsMeterReading, rec).write(update_vals)
 
     # ── SQL constraints ───────────────────────────────────────────────────
 
     _sql_constraints = [
         (
-            "one_opening_per_nozzle_per_shift",
+            "one_reading_type_per_nozzle_per_shift",
             "unique(shift_id, nozzle_id, reading_type)",
             "Only one reading of each type (opening/closing) is allowed per "
             "nozzle per shift.",
@@ -189,20 +262,32 @@ class FmsMeterReading(models.Model):
                     )
                 )
 
-    @api.constrains("shift_id")
-    def _check_shift_active(self):
-        """Reading must belong to a shift that has not been closed or disputed."""
-        blocked = {"closed", "disputed"}
+    @api.constrains("shift_id", "reading_type")
+    def _check_shift_state_matches_reading_type(self):
+        """Opening readings require an active shift; closing require 'closing' state."""
         for rec in self:
-            if rec.shift_id.state in blocked:
-                raise ValidationError(
-                    _(
-                        "Cannot add a meter reading to shift '%(shift)s' — "
-                        "it is in state '%(state)s'.",
-                        shift=rec.shift_id.name,
-                        state=rec.shift_id.state,
+            state = rec.shift_id.state
+            if rec.reading_type == "opening":
+                if state in ("closed", "disputed"):
+                    raise ValidationError(
+                        _(
+                            "Cannot add an opening reading to shift '%(shift)s' — "
+                            "it is in state '%(state)s'.",
+                            shift=rec.shift_id.name,
+                            state=state,
+                        )
                     )
-                )
+            elif rec.reading_type == "closing":
+                if state != "closing":
+                    raise ValidationError(
+                        _(
+                            "Closing readings can only be recorded while the shift "
+                            "is in the 'Closing' state.  Shift '%(shift)s' is "
+                            "currently '%(state)s'.",
+                            shift=rec.shift_id.name,
+                            state=state,
+                        )
+                    )
 
     @api.constrains("nozzle_id")
     def _check_nozzle_active(self):
