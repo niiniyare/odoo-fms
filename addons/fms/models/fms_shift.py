@@ -145,6 +145,15 @@ class FmsShift(models.Model):
         string="Meter Readings",
         compute="_compute_meter_reading_count",
     )
+    dip_reading_ids = fields.One2many(
+        "fms.tank.dip.reading",
+        "shift_id",
+        string="Dip Readings",
+    )
+    dip_reading_count = fields.Integer(
+        string="Dip Readings",
+        compute="_compute_dip_reading_count",
+    )
     total_dispensed_litres = fields.Float(
         string="Total Dispensed (L)",
         digits=(16, 3),
@@ -159,6 +168,10 @@ class FmsShift(models.Model):
     def _compute_meter_reading_count(self):
         for rec in self:
             rec.meter_reading_count = len(rec.meter_reading_ids)
+
+    def _compute_dip_reading_count(self):
+        for rec in self:
+            rec.dip_reading_count = len(rec.dip_reading_ids)
 
     @api.depends("meter_reading_ids.dispensed_litres", "meter_reading_ids.state",
                  "meter_reading_ids.reading_type")
@@ -243,6 +256,17 @@ class FmsShift(models.Model):
     def action_mark_disputed(self):
         """Closed → Disputed."""
         self.write({"state": "disputed"})
+
+    def action_view_dip_readings(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Dip Readings"),
+            "res_model": "fms.tank.dip.reading",
+            "view_mode": "list,form",
+            "domain": [("shift_id", "=", self.id)],
+            "context": {"default_shift_id": self.id},
+        }
 
     def action_view_meter_readings(self):
         self.ensure_one()

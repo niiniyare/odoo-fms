@@ -72,6 +72,13 @@
                             <field name="meter_reading_count" widget="statinfo"
                                    string="Meter Readings"/>
                         </button>
+                        <button name="action_view_dip_readings"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-flask">
+                            <field name="dip_reading_count" widget="statinfo"
+                                   string="Dip Readings"/>
+                        </button>
                     </div>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
